@@ -1,4 +1,4 @@
-package com.marnikitta.optimization;
+package com.marnikitta.optimization.first;
 
 import com.marnikitta.math.Vector;
 import org.slf4j.Logger;
@@ -57,6 +57,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
       }
 
       if (Math.abs(gradNorm) < tolerance) {
+        log.debug("Early exit due to low gradient norm: {}", gradNorm);
         break;
       }
 
@@ -64,23 +65,29 @@ public class ArmijoGD implements FirstOrderMinimizer {
 
       // Armijo
       final double dDiff = grad.dot(d);
+
       double alpha = 1;
 
       x.plus(alpha, d, armijoAttempt);
-
+      double armijoTest = oracle.func(armijoAttempt);
       oracleCalls++;
-      if (oracle.func(armijoAttempt) <= f + c1 * alpha * dDiff) {
-        while (oracle.func(armijoAttempt) <= f + c1 * alpha * dDiff) {
+
+      if (armijoTest <= f + c1 * alpha * dDiff) {
+        while (armijoTest <= f + c1 * alpha * dDiff) {
           oracleCalls++;
           alpha *= eta;
+
           x.plus(alpha, d, armijoAttempt);
+          armijoTest = oracle.func(armijoAttempt);
         }
         x.plus(alpha / eta, d, armijoAttempt);
       } else {
-        while (oracle.func(armijoAttempt) > f + c1 * alpha * dDiff) {
+        while (armijoTest > f + c1 * alpha * dDiff) {
           oracleCalls++;
           alpha /= eta;
+
           x.plus(alpha, d, armijoAttempt);
+          armijoTest = oracle.func(armijoAttempt);
         }
       }
 
@@ -90,7 +97,6 @@ public class ArmijoGD implements FirstOrderMinimizer {
 
       iteration++;
     }
-
     return x;
   }
 }

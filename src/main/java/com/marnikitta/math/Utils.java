@@ -1,6 +1,6 @@
 package com.marnikitta.math;
 
-import com.marnikitta.optimization.FirstOrderOracle;
+import com.marnikitta.optimization.first.FirstOrderOracle;
 
 import java.util.Random;
 

@@ -2,7 +2,7 @@ package com.marnikitta.logit;
 
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
-import com.marnikitta.optimization.FirstOrderOracle;
+import com.marnikitta.optimization.first.FirstOrderOracle;
 
 import java.util.function.DoubleUnaryOperator;
 

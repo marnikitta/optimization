@@ -1,6 +1,8 @@
 package com.marnikitta.optimization;
 
 import com.marnikitta.math.Vector;
+import com.marnikitta.optimization.first.ArmijoGD;
+import com.marnikitta.optimization.first.FirstOrderOracle;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

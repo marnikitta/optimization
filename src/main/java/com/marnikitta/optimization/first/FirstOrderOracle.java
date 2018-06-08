@@ -1,4 +1,4 @@
-package com.marnikitta.optimization;
+package com.marnikitta.optimization.first;
 
 import com.marnikitta.math.Vector;
 
