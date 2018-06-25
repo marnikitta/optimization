@@ -21,11 +21,6 @@ public class Vector {
     this.data = new double[length];
   }
 
-  public Vector wrap(double[] data) {
-    this.data = data;
-    return this;
-  }
-
   public int length() {
     return data.length;
   }
@@ -34,46 +29,12 @@ public class Vector {
     return data[index];
   }
 
-  public Vector set(int i, double value) {
+  public void set(int i, double value) {
     data[i] = value;
-    return this;
-  }
-
-  public Vector apply(DoubleUnaryOperator function, Vector dst) {
-    for (int i = 0; i < data.length; i++) {
-      dst.set(i, function.applyAsDouble(data[i]));
-    }
-    return dst;
-  }
-
-  public Vector apply(DoubleUnaryOperator function) {
-    for (int i = 0; i < data.length; i++) {
-      set(i, function.applyAsDouble(data[i]));
-    }
-    return this;
   }
 
   public void plusAt(int index, double value) {
     data[index] += value;
-  }
-
-  public void plus(Vector other, Vector dest) {
-    Assert.assertSameLength(this, other);
-    Assert.assertSameLength(this, dest);
-
-    for (int i = 0; i < length(); ++i) {
-      dest.set(i, get(i) + other.get(i));
-    }
-  }
-
-  public Vector plus(Vector other) {
-    Assert.assertSameLength(this, other);
-
-    for (int i = 0; i < length(); ++i) {
-      data[i] += other.get(i);
-    }
-
-    return this;
   }
 
   public void plus(double alpha, Vector other) {
@@ -99,14 +60,6 @@ public class Vector {
     for (int i = 0; i < length(); ++i) {
       dest.set(i, coefficient * get(i));
     }
-  }
-
-  public Vector mult(double coefficient) {
-    for (int i = 0; i < length(); ++i) {
-      data[i] *= coefficient;
-    }
-
-    return this;
   }
 
   public double l2Norm() {

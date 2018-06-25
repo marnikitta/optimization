@@ -4,7 +4,6 @@ import com.marnikitta.math.util.Assert;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.DoubleUnaryOperator;
 
 public class Matrix {
   private double[][] data;
@@ -29,13 +28,6 @@ public class Matrix {
     n = data[0].length;
   }
 
-  public Matrix wrap(double[][] data) {
-    this.data = data;
-    m = data.length;
-    n = data[0].length;
-    return this;
-  }
-
   public void clear() {
     for (int i = 0; i < m; ++i) {
       Arrays.fill(data[i], 0);
@@ -58,39 +50,6 @@ public class Matrix {
     return n;
   }
 
-  public void apply(DoubleUnaryOperator function, Matrix dst) {
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        dst.set(i, j, function.applyAsDouble(data[i][j]));
-      }
-    }
-  }
-
-  public Matrix apply(DoubleUnaryOperator function) {
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        set(i, j, function.applyAsDouble(data[i][j]));
-      }
-    }
-    return this;
-  }
-
-  public void copy(Matrix dst) {
-    for (int i = 0; i < m; ++i) {
-      System.arraycopy(data[i], 0, dst.data[i], 0, data[i].length);
-    }
-  }
-
-  public void plus(double alpha, Matrix that, Matrix dest) {
-    Assert.assertSame(this, that);
-    Assert.assertSame(this, dest);
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        dest.set(i, j, get(i, j) + alpha * that.get(i, j));
-      }
-    }
-  }
-
   public void mult(Vector vec, Vector dst) {
     Assert.assertLength(vec, n);
     Assert.assertLength(dst, m);
@@ -102,12 +61,10 @@ public class Matrix {
       }
       dst.set(i, tmp);
     }
-
   }
 
   public void mult(Matrix that, Matrix dst) {
     Assert.assertM(that, n);
-
     Assert.assertM(dst, m);
     Assert.assertN(dst, that.n());
 
