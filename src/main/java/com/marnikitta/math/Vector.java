@@ -53,6 +53,10 @@ public class Vector {
     return this;
   }
 
+  public void plusAt(int index, double value) {
+    data[index] += value;
+  }
+
   public void plus(Vector other, Vector dest) {
     Assert.assertSameLength(this, other);
     Assert.assertSameLength(this, dest);
@@ -113,6 +117,17 @@ public class Vector {
     }
 
     return Math.sqrt(result);
+  }
+
+  public double l1Dist(Vector other) {
+    double result = 0;
+
+    for (int i = 0; i < data.length; i++) {
+      final double v = data[i] - other.get(i);
+      result += Math.abs(v);
+    }
+
+    return result;
   }
 
   public double l2Dist(Vector other) {

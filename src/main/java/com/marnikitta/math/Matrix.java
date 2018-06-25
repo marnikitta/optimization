@@ -81,6 +81,16 @@ public class Matrix {
     }
   }
 
+  public void plus(double alpha, Matrix that, Matrix dest) {
+    Assert.assertSame(this, that);
+    Assert.assertSame(this, dest);
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        dest.set(i, j, get(i, j) + alpha * that.get(i, j));
+      }
+    }
+  }
+
   public void mult(Vector vec, Vector dst) {
     Assert.assertLength(vec, n);
     Assert.assertLength(dst, m);
@@ -151,5 +161,18 @@ public class Matrix {
   @Override
   public String toString() {
     return Arrays.deepToString(data);
+  }
+
+  public double maxAbsDiff(Matrix that) {
+    Assert.assertSame(this, that);
+    double result = 0;
+
+    for (int j = 0; j < n; ++j) {
+      for (int i = 0; i < m; ++i) {
+        result = Math.max(result, Math.abs(get(i, j) - that.get(i, j)));
+      }
+    }
+
+    return Math.sqrt(result);
   }
 }
