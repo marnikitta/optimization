@@ -1,17 +1,45 @@
 package com.marnikitta.math;
 
+import com.marnikitta.math.util.Assert;
+
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 
 public class Matrix {
-  private double[][] data = new double[0][0];
+  private double[][] data;
   private int m = 0;
   private int n = 0;
+
+  public Matrix(int n) {
+    this.data = new double[n][n];
+    this.m = n;
+    this.n = n;
+  }
+
+  public Matrix(int m, int n) {
+    this.data = new double[m][m];
+    this.m = m;
+    this.n = n;
+  }
+
+  public Matrix(double[][] data) {
+    this.data = data;
+    m = data.length;
+    n = data[0].length;
+  }
 
   public Matrix wrap(double[][] data) {
     this.data = data;
     m = data.length;
     n = data[0].length;
     return this;
+  }
+
+  public void clear() {
+    for (int i = 0; i < m; ++i) {
+      Arrays.fill(data[i], 0);
+    }
   }
 
   public double get(int i, int j) {
@@ -48,9 +76,15 @@ public class Matrix {
     return this;
   }
 
+  public void copy(Matrix dst) {
+    for (int i = 0; i < m; ++i) {
+      System.arraycopy(data[i], 0, dst.data[i], 0, data[i].length);
+    }
+  }
+
   public Vector mult(Vector vec, Vector dst) {
-    assertLength(vec, n);
-    assertLength(dst, m);
+    Assert.assertLength(vec, n);
+    Assert.assertLength(dst, m);
 
     for (int i = 0; i < m; ++i) {
       double tmp = 0;
@@ -63,34 +97,61 @@ public class Matrix {
     return dst;
   }
 
-  public Matrix transpose(Matrix dst) {
-    assertM(dst, n);
-    assertN(dst, m);
+  public void mult(Matrix that, Matrix dst) {
+    Assert.assertM(that, n);
+
+    Assert.assertM(dst, m);
+    Assert.assertN(dst, that.n());
+
+    for (int i = 0; i < m; ++i) {
+      final double t = get(i, 0);
+      for (int j = 0; j < that.n(); ++j) {
+        dst.set(i, j, t * that.get(0, j));
+      }
+
+      for (int k = 1; k < n; ++k) {
+        final double s = get(i, k);
+        for (int j = 0; j < that.n(); ++j) {
+          dst.set(i, j, dst.get(i, j) + s * that.get(k, j));
+        }
+      }
+    }
+  }
+
+  public void transpose(Matrix dst) {
+    Assert.assertM(dst, n);
+    Assert.assertN(dst, m);
 
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         dst.set(i, j, data[j][i]);
       }
     }
-
-    return dst;
   }
 
-  private void assertM(Matrix matrix, int m) {
-    if (matrix.m() != m) {
-      throw new IllegalArgumentException("Matrix hasn't desired height");
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final Matrix matrix = (Matrix) o;
+    return m == matrix.m() &&
+      n == matrix.n() &&
+      Arrays.deepEquals(data, matrix.data);
   }
 
-  private void assertN(Matrix matrix, int n) {
-    if (matrix.n() != n) {
-      throw new IllegalArgumentException("Matrix hasn't desired width");
-    }
+  @Override
+  public int hashCode() {
+    int result = Objects.hash(m, n);
+    result = 31 * result + Arrays.deepHashCode(data);
+    return result;
   }
 
-  private void assertLength(Vector vec, int length) {
-    if (vec.length() != length) {
-      throw new IllegalArgumentException("Vector hasn't desired length");
-    }
+  @Override
+  public String toString() {
+    return Arrays.deepToString(data);
   }
 }

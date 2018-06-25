@@ -23,8 +23,9 @@ public class ArmijoGDTest {
       }
     };
 
-    final Vector minimize = new ArmijoGD().minimize(oracle, new Vector(1, 7));
-    Assert.assertTrue(minimize.l2Dist(new Vector(1, 0)) < 1.0e-6);
+    final Vector start = new Vector(1, 7);
+    new ArmijoGD().minimize(oracle, start);
+    Assert.assertTrue(start.l2Dist(new Vector(1, 0)) < 1.0e-6);
   }
 
   @Test
@@ -46,8 +47,9 @@ public class ArmijoGDTest {
       }
     };
 
-    final Vector minimize = new ArmijoGD().minimize(oracle, new Vector(2, -700));
-    Assert.assertTrue(minimize.l2Dist(new Vector(2, 1)) < 1.0e-6);
+    final Vector start = new Vector(2, -700);
+    new ArmijoGD().minimize(oracle, start);
+    Assert.assertTrue(start.l2Dist(new Vector(2, 1)) < 1.0e-6);
   }
 
   @Test
@@ -75,7 +77,8 @@ public class ArmijoGDTest {
       }
     };
 
-    final Vector argmin = new ArmijoGD().minimize(oracle, new Vector(n, 19));
-    Assert.assertTrue(Math.abs(oracle.func(argmin)) < 1.0e-6, "Got oracle: " + oracle.func(argmin));
+    final Vector start = new Vector(n, 19);
+    new ArmijoGD().minimize(oracle, start);
+    Assert.assertTrue(Math.abs(oracle.func(start)) < 1.0e-6, "Got oracle: " + oracle.func(start));
   }
 }

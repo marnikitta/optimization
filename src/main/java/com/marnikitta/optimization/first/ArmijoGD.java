@@ -32,12 +32,12 @@ public class ArmijoGD implements FirstOrderMinimizer {
   }
 
   @Override
-  public Vector minimize(FirstOrderOracle oracle, Vector start) {
+  public void minimize(FirstOrderOracle oracle, Vector start) {
     final Vector d = new Vector(start.length());
     final Vector grad = new Vector(start.length());
 
     Vector armijoAttempt = new Vector(start.length());
-    Vector x = start.copy();
+    Vector x = start;
 
     final String header = String.format("%15s %15s %15s %15s\n", "iteration", "grad norm", "fxk", "oracleCalls");
     log.debug(header);
@@ -97,6 +97,5 @@ public class ArmijoGD implements FirstOrderMinimizer {
 
       iteration++;
     }
-    return x;
   }
 }

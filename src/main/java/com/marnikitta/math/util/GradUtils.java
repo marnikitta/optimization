@@ -1,16 +1,17 @@
-package com.marnikitta.math;
+package com.marnikitta.math.util;
 
+import com.marnikitta.math.Vector;
 import com.marnikitta.optimization.first.FirstOrderOracle;
 
 import java.util.Random;
 
-public final class Utils {
+public final class GradUtils {
   public static final double EPS = 1.0e-8;
   public static final double EPS_GRAD = 1.0e-4;
   public static final double LEFT = -1;
   public static final double RIGHT = 1;
 
-  private Utils() {}
+  private GradUtils() {}
 
   public static void checkGrad(FirstOrderOracle oracle, int dim, int pointsCount) {
     final Vector grad = new Vector(dim);
