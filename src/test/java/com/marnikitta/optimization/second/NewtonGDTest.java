@@ -19,7 +19,7 @@ public class NewtonGDTest {
 
   @Test
   public void testRosenbrock() {
-    final int n = 100;
+    final int n = 1000;
 
     final SecondOrderOracle oracle = new Rosenbrock(n);
     final Vector start = new Vector(n, 1111111);
