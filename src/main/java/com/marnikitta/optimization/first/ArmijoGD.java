@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class ArmijoGD implements FirstOrderMinimizer {
   public static final int DEFAULT_MAX_ITER = (int) 1.0e6;
   public static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
-  public static final double DEFAULT_TOLERANCE = 1.0e-6;
+  public static final double DEFAULT_TOLERANCE = 1.0e-5;
   public static final double DEFAULT_C1 = 1.0e-6;
 
   private final Logger log = LoggerFactory.getLogger(ArmijoGD.class);
@@ -30,10 +30,10 @@ public class ArmijoGD implements FirstOrderMinimizer {
 
   @Override
   public void minimize(FirstOrderOracle oracle, Vector start) {
-    final Vector d = new Vector(start.length());
-    final Vector grad = new Vector(start.length());
+    Vector d = start.copy();
+    Vector grad = start.copy();
 
-    Vector armijoAttempt = new Vector(start.length());
+    Vector armijoAttempt = start.copy();
 
     final String header = String.format("%15s %15s %15s %15s\n", "iteration", "grad norm", "fxk", "oracleCalls");
     log.debug(header);
@@ -78,7 +78,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
         armijoTest = oracle.func(armijoAttempt);
       }
 
-      armijoAttempt.copy(start);
+      armijoAttempt.copyTo(start);
       iteration++;
     }
   }

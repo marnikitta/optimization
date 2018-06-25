@@ -1,14 +1,13 @@
 package com.marnikitta.ml.logit;
 
-import com.marnikitta.math.Matrix;
-import com.marnikitta.math.Vector;
-import com.marnikitta.optimization.first.FirstOrderOracle;
+import com.marnikitta.math.ArrayMatrix;
+import com.marnikitta.math.ArrayVector;
 
 import java.util.function.DoubleUnaryOperator;
 
 public class LogitRegression {
 
-  public Model fit(Matrix x, Vector y) {
+  public Model fit(ArrayMatrix x, ArrayVector y) {
     return new Model();
   }
 
@@ -16,25 +15,6 @@ public class LogitRegression {
     @Override
     public double applyAsDouble(double operand) {
       return 0;
-    }
-  }
-
-  public static class LossOracle implements FirstOrderOracle {
-    private final Matrix x;
-    private final Vector y;
-
-    public LossOracle(Matrix x, Vector y) {
-      this.x = x;
-      this.y = y;
-    }
-
-    @Override
-    public double func(Vector x) {
-      return 0;
-    }
-
-    @Override
-    public void grad(Vector x, Vector dst) {
     }
   }
 }

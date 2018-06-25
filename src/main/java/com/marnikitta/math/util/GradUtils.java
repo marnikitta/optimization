@@ -1,5 +1,7 @@
 package com.marnikitta.math.util;
 
+import com.marnikitta.math.ArrayMatrix;
+import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
 import com.marnikitta.optimization.first.FirstOrderOracle;
@@ -20,10 +22,10 @@ public final class GradUtils {
   }
 
   public static void checkGrad(FirstOrderOracle oracle, int dim, int pointsCount, double eps) {
-    final Vector grad = new Vector(dim);
-    final Vector approxGrad = new Vector(dim);
+    Vector grad = new ArrayVector(dim);
+    Vector approxGrad = new ArrayVector(dim);
 
-    final Vector point = new Vector(dim);
+    Vector point = new ArrayVector(dim);
 
     final Random rd = new Random(4);
 
@@ -34,7 +36,7 @@ public final class GradUtils {
 
       for (int j = 0; j < dim; ++j) {
         final double value = point.get(j);
-        point.plusAt(j, EPS1);
+        point.set(j, point.get(j) + EPS1);
         final double fPlus = oracle.func(point);
         point.set(j, value);
         approxGrad.set(j, (fPlus - oracle.func(point)) / EPS1);
@@ -42,7 +44,7 @@ public final class GradUtils {
 
       oracle.grad(point, grad);
 
-      final double abs = grad.l1Dist(approxGrad);
+      final double abs = grad.l1Distance(approxGrad);
 
       if (abs > eps) {
         throw new IllegalArgumentException("Grad is broken: difference is " + abs);
@@ -51,10 +53,10 @@ public final class GradUtils {
   }
 
   public static void checkHessian(SecondOrderOracle oracle, int dim, int pointsCount, double eps) {
-    final Matrix hessian = new Matrix(dim);
-    final Matrix approxHessian = new Matrix(dim);
+    Matrix hessian = new ArrayMatrix(dim);
+    Matrix approxHessian = new ArrayMatrix(dim);
 
-    final Vector point = new Vector(dim);
+    Vector point = new ArrayVector(dim);
 
     final Random rd = new Random();
 
@@ -70,17 +72,17 @@ public final class GradUtils {
           final double xi = point.get(i);
           final double xj = point.get(j);
 
-          point.plusAt(i, EPS2);
-          point.plusAt(j, EPS2);
+          point.set(i, point.get(i) + EPS2);
+          point.set(j, point.get(j) + EPS2);
           result += oracle.func(point);
           point.set(i, xi);
           point.set(j, xj);
 
-          point.plusAt(i, EPS2);
+          point.set(i, point.get(i) + EPS2);
           result -= oracle.func(point);
           point.set(i, xi);
 
-          point.plusAt(j, EPS2);
+          point.set(j, point.get(j) + EPS2);
           result -= oracle.func(point);
           point.set(j, xj);
 
