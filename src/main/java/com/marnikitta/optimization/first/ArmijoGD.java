@@ -57,6 +57,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
       }
 
       if (Math.abs(gradNorm) < tolerance) {
+        log.debug(String.format("%15d %15e %15e% 15d\n", iteration, gradNorm, f, oracleCalls));
         log.debug("Early exit due to low gradient norm: {}", gradNorm);
         break;
       }

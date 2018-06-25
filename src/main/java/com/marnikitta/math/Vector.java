@@ -72,6 +72,14 @@ public class Vector {
     return this;
   }
 
+  public void plus(double alpha, Vector other) {
+    Assert.assertSameLength(this, other);
+
+    for (int i = 0; i < length(); ++i) {
+      set(i, get(i) + alpha * other.get(i));
+    }
+  }
+
   public void plus(double alpha, Vector other, Vector dst) {
     Assert.assertSameLength(this, other);
     Assert.assertSameLength(this, dst);

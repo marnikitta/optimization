@@ -2,6 +2,8 @@ package com.marnikitta.optimization.second;
 
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
+import com.marnikitta.math.algorithms.Factorization;
+import com.marnikitta.math.algorithms.LinearSolve;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +30,51 @@ public class NewtonGD implements SecondOrderMinimizer {
 
   @Override
   public void minimize(SecondOrderOracle oracle, Vector start) {
-    final Vector point = start;
     final Vector grad = new Vector(start.length());
+    final Vector tmpD = new Vector(start.length());
+    final Vector d = new Vector(start.length());
     final Matrix hessian = new Matrix(start.length());
+    final Matrix cholesky = new Matrix(start.length());
+    final Matrix choleskyT = new Matrix(start.length());
+
+    final String header = String.format("%15s %15s %15s %15s\n", "iteration", "grad norm", "fxk", "oracleCalls");
+    log.debug(header);
 
     int iteration = 0;
     int oracleCalls = 0;
 
     while (iteration < maxIterations && oracleCalls < maxOracleCalls) {
+      oracleCalls += 1;
       final double f = oracle.func(start);
       oracle.grad(start, grad);
       oracle.hessian(start, hessian);
+
+      final double gradNorm = grad.l2Norm();
+
+      if (iteration % 1001 == 0 && log.isDebugEnabled()) {
+        log.debug(String.format("%15d %15e %15e% 15d\n", iteration, gradNorm, f, oracleCalls));
+      }
+
+      if (Math.abs(gradNorm) < tolerance) {
+        log.debug(String.format("%15d %15e %15e% 15d\n", iteration, gradNorm, f, oracleCalls));
+        log.debug("Early exit due to low gradient norm: {}", gradNorm);
+        break;
+      }
+
+      double tau = 0;
+      while (!Factorization.cholesky(hessian, cholesky)) {
+        for (int i = 0; i < start.length(); ++i) {
+          hessian.set(i, i, hessian.get(i, i) + tau);
+        }
+
+        tau = Math.max(tau, tau * 2);
+      }
+
+      LinearSolve.rootsLower(cholesky, grad, tmpD);
+      cholesky.transpose(choleskyT);
+      LinearSolve.rootsUpper(choleskyT, tmpD, d);
+
+      start.plus(-1, d);
 
       iteration++;
     }
