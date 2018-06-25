@@ -14,6 +14,10 @@ public final class GradUtils {
   private GradUtils() {}
 
   public static void checkGrad(FirstOrderOracle oracle, int dim, int pointsCount) {
+    checkGrad(oracle, dim, pointsCount, EPS_GRAD);
+  }
+
+  public static void checkGrad(FirstOrderOracle oracle, int dim, int pointsCount, double eps) {
     final Vector grad = new Vector(dim);
     final Vector approxGrad = new Vector(dim);
 
@@ -39,7 +43,7 @@ public final class GradUtils {
 
       final double abs = grad.l2Dist(approxGrad);
 
-      if (abs > EPS_GRAD) {
+      if (abs > eps) {
         throw new IllegalArgumentException("Grad is broken: difference is " + abs);
       }
     }

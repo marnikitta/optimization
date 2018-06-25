@@ -1,4 +1,4 @@
-package com.marnikitta.logit;
+package com.marnikitta.ml.logit;
 
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;

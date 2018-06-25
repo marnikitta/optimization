@@ -129,6 +129,14 @@ public class Vector {
     return result;
   }
 
+  public double sum(DoubleUnaryOperator f) {
+    double result = 0;
+    for (double d : data) {
+      result += f.applyAsDouble(d);
+    }
+    return result;
+  }
+
   public double sum() {
     double result = 0;
     for (double d : data) {
@@ -137,8 +145,8 @@ public class Vector {
     return result;
   }
 
-  public Vector copy() {
-    return new Vector(Arrays.copyOf(data, data.length));
+  public void copy(Vector dst) {
+    System.arraycopy(data, 0, dst.data, 0, data.length);
   }
 
   @Override

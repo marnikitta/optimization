@@ -8,8 +8,8 @@ import java.util.function.DoubleUnaryOperator;
 
 public class Matrix {
   private double[][] data;
-  private int m = 0;
-  private int n = 0;
+  private int m;
+  private int n;
 
   public Matrix(int n) {
     this.data = new double[n][n];
@@ -58,13 +58,12 @@ public class Matrix {
     return n;
   }
 
-  public Matrix apply(DoubleUnaryOperator function, Matrix dst) {
+  public void apply(DoubleUnaryOperator function, Matrix dst) {
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         dst.set(i, j, function.applyAsDouble(data[i][j]));
       }
     }
-    return dst;
   }
 
   public Matrix apply(DoubleUnaryOperator function) {
@@ -82,7 +81,7 @@ public class Matrix {
     }
   }
 
-  public Vector mult(Vector vec, Vector dst) {
+  public void mult(Vector vec, Vector dst) {
     Assert.assertLength(vec, n);
     Assert.assertLength(dst, m);
 
@@ -94,7 +93,6 @@ public class Matrix {
       dst.set(i, tmp);
     }
 
-    return dst;
   }
 
   public void mult(Matrix that, Matrix dst) {
