@@ -1,12 +1,14 @@
 package com.marnikitta.math;
 
+import com.marnikitta.math.util.Assert;
+
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 
 public class Vector {
   private double[] data;
 
-  private Vector(double[] value) {
+  public Vector(double[] value) {
     this.data = value;
   }
 
@@ -52,8 +54,8 @@ public class Vector {
   }
 
   public void plus(Vector other, Vector dest) {
-    assertSameLength(other);
-    assertSameLength(dest);
+    Assert.assertSameLength(this, other);
+    Assert.assertSameLength(this, dest);
 
     for (int i = 0; i < length(); ++i) {
       dest.set(i, get(i) + other.get(i));
@@ -61,7 +63,7 @@ public class Vector {
   }
 
   public Vector plus(Vector other) {
-    assertSameLength(other);
+    Assert.assertSameLength(this, other);
 
     for (int i = 0; i < length(); ++i) {
       data[i] += other.get(i);
@@ -71,8 +73,8 @@ public class Vector {
   }
 
   public void plus(double alpha, Vector other, Vector dst) {
-    assertSameLength(other);
-    assertSameLength(dst);
+    Assert.assertSameLength(this, other);
+    Assert.assertSameLength(this, dst);
 
     for (int i = 0; i < length(); ++i) {
       dst.set(i, get(i) + alpha * other.get(i));
@@ -80,7 +82,7 @@ public class Vector {
   }
 
   public void mult(double coefficient, Vector dest) {
-    assertSameLength(dest);
+    Assert.assertSameLength(this, dest);
 
     for (int i = 0; i < length(); ++i) {
       dest.set(i, coefficient * get(i));
@@ -117,7 +119,7 @@ public class Vector {
   }
 
   public double dot(Vector other) {
-    assertSameLength(other);
+    Assert.assertSameLength(this, other);
     double result = 0;
 
     for (int i = 0; i < length(); ++i) {
@@ -139,14 +141,25 @@ public class Vector {
     return new Vector(Arrays.copyOf(data, data.length));
   }
 
-  private void assertSameLength(Vector other) {
-    if (other.length() != length()) {
-      throw new IllegalArgumentException("Other vector should have the same length");
-    }
-  }
-
   @Override
   public String toString() {
     return Arrays.toString(data);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final Vector vector = (Vector) o;
+    return Arrays.equals(data, vector.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(data);
   }
 }
