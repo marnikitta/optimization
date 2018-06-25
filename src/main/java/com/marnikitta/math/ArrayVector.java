@@ -46,11 +46,9 @@ public class ArrayVector implements Vector {
   }
 
   @Override
-  public void mult(double coefficient, Vector dest) {
-    Assert.assertSameLength(this, dest);
-
+  public void mult(double coefficient) {
     for (int i = 0; i < length(); ++i) {
-      dest.set(i, coefficient * get(i));
+      set(i, coefficient * get(i));
     }
   }
 
@@ -62,7 +60,7 @@ public class ArrayVector implements Vector {
       result += d * d;
     }
 
-    return Math.sqrt(result);
+    return result;
   }
 
   @Override
@@ -113,9 +111,9 @@ public class ArrayVector implements Vector {
   }
 
   @Override
-  public void copyTo(Vector dst) {
-    if (dst instanceof ArrayVector) {
-      final ArrayVector arrayDst = ((ArrayVector) dst);
+  public void copyTo(Vector dest) {
+    if (dest instanceof ArrayVector) {
+      final ArrayVector arrayDst = ((ArrayVector) dest);
       System.arraycopy(data, 0, arrayDst.data, 0, data.length);
     } else {
       throw new UnsupportedOperationException();

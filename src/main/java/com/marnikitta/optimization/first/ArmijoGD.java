@@ -5,10 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ArmijoGD implements FirstOrderMinimizer {
-  public static final int DEFAULT_MAX_ITER = (int) 1.0e6;
-  public static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
-  public static final double DEFAULT_TOLERANCE = 1.0e-5;
-  public static final double DEFAULT_C1 = 1.0e-6;
+  private static final int DEFAULT_MAX_ITER = (int) 1.0e6;
+  private static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
+  private static final double DEFAULT_TOLERANCE = 1.0e-5;
+  private static final double DEFAULT_C1 = 1.0e-6;
 
   private final Logger log = LoggerFactory.getLogger(ArmijoGD.class);
 
@@ -30,7 +30,6 @@ public class ArmijoGD implements FirstOrderMinimizer {
 
   @Override
   public void minimize(FirstOrderOracle oracle, Vector start) {
-    Vector d = start.copy();
     Vector grad = start.copy();
 
     Vector armijoAttempt = start.copy();
@@ -60,13 +59,11 @@ public class ArmijoGD implements FirstOrderMinimizer {
         break;
       }
 
-      grad.mult(-1.0 / gradNorm, d);
-
       // Armijo
       alpha *= 2;
-      final double dDiff = grad.dot(d);
+      final double dDiff = -grad.l2Norm2();
 
-      start.plus(alpha, d, armijoAttempt);
+      start.plus(-alpha, grad, armijoAttempt);
       double armijoTest = oracle.func(armijoAttempt);
       oracleCalls++;
 
@@ -74,7 +71,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
         oracleCalls++;
         alpha /= 2;
 
-        start.plus(alpha, d, armijoAttempt);
+        start.plus(-alpha, grad, armijoAttempt);
         armijoTest = oracle.func(armijoAttempt);
       }
 

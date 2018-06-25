@@ -15,7 +15,7 @@ public interface Matrix {
 
   void mult(Matrix that, Matrix dest);
 
-  void transpose(Matrix dst);
+  void transpose(Matrix dest);
 
   double maxAbsDiff(Matrix that);
 

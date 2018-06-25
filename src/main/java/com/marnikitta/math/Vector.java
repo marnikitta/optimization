@@ -9,7 +9,7 @@ public interface Vector {
 
   void plus(double alpha, Vector other, Vector dst);
 
-  void mult(double coefficient, Vector dest);
+  void mult(double coefficient);
 
   double l2Norm2();
 
@@ -23,5 +23,5 @@ public interface Vector {
 
   Vector copy();
 
-  void copyTo(Vector dst);
+  void copyTo(Vector dest);
 }
