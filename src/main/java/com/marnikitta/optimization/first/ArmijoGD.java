@@ -45,6 +45,8 @@ public class ArmijoGD implements FirstOrderMinimizer {
     int iteration = 0;
     int oracleCalls = 0;
 
+    double alpha = 1;
+
     while (iteration < maxIterations && oracleCalls < maxOracleCalls) {
       final double f = oracle.func(x);
       oracle.grad(x, grad);
@@ -67,8 +69,6 @@ public class ArmijoGD implements FirstOrderMinimizer {
       // Armijo
       final double dDiff = grad.dot(d);
 
-      double alpha = 1;
-
       x.plus(alpha, d, armijoAttempt);
       double armijoTest = oracle.func(armijoAttempt);
       oracleCalls++;
@@ -81,7 +81,8 @@ public class ArmijoGD implements FirstOrderMinimizer {
           x.plus(alpha, d, armijoAttempt);
           armijoTest = oracle.func(armijoAttempt);
         }
-        x.plus(alpha / eta, d, armijoAttempt);
+        alpha /= eta;
+        x.plus(alpha, d, armijoAttempt);
       } else {
         while (armijoTest > f + c1 * alpha * dDiff) {
           oracleCalls++;
