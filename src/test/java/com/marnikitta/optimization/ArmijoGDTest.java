@@ -34,7 +34,7 @@ public class ArmijoGDTest {
 
     final Vector start = new ArrayVector(2, -70);
     new ArmijoGD().minimize(oracle, start);
-    Assert.assertTrue(start.l2Distance(new ArrayVector(2, 1)) < 1.0e4);
+    Assert.assertTrue(Vector.l2Distance(start, new ArrayVector(2, 1)) < 1.0e4);
   }
 
   @Test
@@ -45,6 +45,6 @@ public class ArmijoGDTest {
 
     final Vector start = new ArrayVector(n, -114);
     new ArmijoGD().minimize(oracle, start);
-    Assert.assertTrue(start.l2Distance(new ArrayVector(n, 1)) < 1.0e-4, "Got oracle: " + oracle.func(start));
+    Assert.assertTrue(Vector.l2Distance(start, new ArrayVector(n, 1)) < 1.0e-4, "Got oracle: " + oracle.func(start));
   }
 }

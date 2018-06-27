@@ -44,7 +44,7 @@ public final class GradUtils {
 
       oracle.grad(point, grad);
 
-      final double abs = grad.l1Distance(approxGrad);
+      final double abs = Vector.l1Distance(grad, approxGrad);
 
       if (abs > eps) {
         throw new IllegalArgumentException("Grad is broken: difference is " + abs);

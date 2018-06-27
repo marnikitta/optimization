@@ -1,20 +1,25 @@
 package com.marnikitta.ml.logit;
 
-import com.marnikitta.math.ArrayMatrix;
-import com.marnikitta.math.ArrayVector;
-
-import java.util.function.DoubleUnaryOperator;
+import com.marnikitta.math.Matrix;
+import com.marnikitta.math.Vector;
+import com.marnikitta.optimization.second.SecondOrderOracle;
 
 public class LogitRegression {
 
-  public Model fit(ArrayMatrix x, ArrayVector y) {
-    return new Model();
-  }
-
-  public static class Model implements DoubleUnaryOperator {
+  private static class Loss implements SecondOrderOracle {
     @Override
-    public double applyAsDouble(double operand) {
+    public void hessian(Vector x, Matrix dst) {
+      dst.clear();
+    }
+
+    @Override
+    public double func(Vector x) {
       return 0;
+    }
+
+    @Override
+    public void grad(Vector x, Vector dst) {
+      dst.clear();
     }
   }
 }

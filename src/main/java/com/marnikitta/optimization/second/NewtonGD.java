@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NewtonGD implements SecondOrderMinimizer {
-  public static final int DEFAULT_MAX_ITER = (int) 1.0e6;
-  public static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
-  public static final double DEFAULT_TOLERANCE = 1.0e-6;
+  private static final int DEFAULT_MAX_ITER = (int) 1.0e6;
+  private static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
+  private static final double DEFAULT_TOLERANCE = 1.0e-6;
 
   private final Logger log = LoggerFactory.getLogger(NewtonGD.class);
 
@@ -75,7 +75,7 @@ public class NewtonGD implements SecondOrderMinimizer {
       cholesky.transpose(choleskyT);
       LinearSolve.rootsUpper(choleskyT, tmpD, d);
 
-      start.plus(-1, d, start);
+      Vector.plus(start, -1, d, start);
 
       iteration++;
     }

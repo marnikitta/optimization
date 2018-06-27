@@ -63,7 +63,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
       alpha *= 2;
       final double dDiff = -grad.l2Norm2();
 
-      start.plus(-alpha, grad, armijoAttempt);
+      Vector.plus(start, -alpha, grad, armijoAttempt);
       double armijoTest = oracle.func(armijoAttempt);
       oracleCalls++;
 
@@ -71,7 +71,7 @@ public class ArmijoGD implements FirstOrderMinimizer {
         oracleCalls++;
         alpha /= 2;
 
-        start.plus(-alpha, grad, armijoAttempt);
+        Vector.plus(start, -alpha, grad, armijoAttempt);
         armijoTest = oracle.func(armijoAttempt);
       }
 

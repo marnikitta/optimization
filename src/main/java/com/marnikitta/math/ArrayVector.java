@@ -1,7 +1,5 @@
 package com.marnikitta.math;
 
-import com.marnikitta.math.util.Assert;
-
 import java.util.Arrays;
 
 public class ArrayVector implements Vector {
@@ -36,72 +34,8 @@ public class ArrayVector implements Vector {
   }
 
   @Override
-  public void plus(double alpha, Vector other, Vector dst) {
-    Assert.assertSameLength(this, other);
-    Assert.assertSameLength(this, dst);
-
-    for (int i = 0; i < length(); ++i) {
-      dst.set(i, get(i) + alpha * other.get(i));
-    }
-  }
-
-  @Override
-  public void mult(double coefficient) {
-    for (int i = 0; i < length(); ++i) {
-      set(i, coefficient * get(i));
-    }
-  }
-
-  @Override
-  public double l2Norm2() {
-    double result = 0;
-
-    for (double d : data) {
-      result += d * d;
-    }
-
-    return result;
-  }
-
-  @Override
-  public double l2Norm() {
-    return Math.sqrt(l2Norm2());
-  }
-
-  @Override
-  public double l1Distance(Vector other) {
-    double result = 0;
-
-    for (int i = 0; i < data.length; i++) {
-      final double v = data[i] - other.get(i);
-      result += Math.abs(v);
-    }
-
-    return result;
-  }
-
-  @Override
-  public double l2Distance(Vector other) {
-    double result = 0;
-
-    for (int i = 0; i < data.length; i++) {
-      final double v = data[i] - other.get(i);
-      result += v * v;
-    }
-
-    return Math.sqrt(result);
-  }
-
-  @Override
-  public double dot(Vector other) {
-    Assert.assertSameLength(this, other);
-    double result = 0;
-
-    for (int i = 0; i < length(); ++i) {
-      result += get(i) * other.get(i);
-    }
-
-    return result;
+  public void clear() {
+    Arrays.fill(data, 0);
   }
 
   @Override

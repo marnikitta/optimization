@@ -27,6 +27,9 @@ public class NewtonGDTest {
     final SecondOrderOracle oracle = new Rosenbrock(n);
     final Vector start = new ArrayVector(n, 1111111);
     new NewtonGD().minimize(oracle, start);
-    Assert.assertTrue(start.l2Distance(new ArrayVector(n, 1)) < 1.0e-4, "Got: " + String.valueOf(start.l2Norm()));
+    Assert.assertTrue(
+      Vector.l2Distance(start, new ArrayVector(n, 1)) < 1.0e-4,
+      "Got: " + String.valueOf(start.l2Norm())
+    );
   }
 }
