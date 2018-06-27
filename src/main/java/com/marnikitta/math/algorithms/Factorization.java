@@ -9,7 +9,7 @@ public class Factorization {
     Assert.assertSame(a, dst);
     dst.clear();
 
-    for (int i = 0; i < a.n(); ++i) {
+    for (int i = 0; i < a.columns(); ++i) {
       double s = 0;
       for (int p = 0; p < i; ++p) {
         final double tmp = dst.get(i, p);
@@ -21,7 +21,7 @@ public class Factorization {
       }
       dst.set(i, i, Math.sqrt(s));
 
-      for (int j = i + 1; j < a.n(); ++j) {
+      for (int j = i + 1; j < a.columns(); ++j) {
         double t = 0;
         for (int p = 0; p < i; ++p) {
           t += dst.get(i, p) * dst.get(j, p);

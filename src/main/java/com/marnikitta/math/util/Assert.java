@@ -5,13 +5,13 @@ import com.marnikitta.math.Vector;
 
 public class Assert {
   public static void assertM(Matrix matrix, int m) {
-    if (matrix.m() != m) {
+    if (matrix.rows() != m) {
       throw new IllegalArgumentException("Matrix hasn't desired height");
     }
   }
 
   public static void assertN(Matrix matrix, int n) {
-    if (matrix.n() != n) {
+    if (matrix.columns() != n) {
       throw new IllegalArgumentException("Matrix hasn't desired width");
     }
   }
@@ -25,8 +25,8 @@ public class Assert {
   public static void assertSymmetric(Matrix matrix) {
     assertSquare(matrix);
 
-    for (int i = 0; i < matrix.n(); ++i) {
-      for (int j = 0; j < matrix.n(); ++j) {
+    for (int i = 0; i < matrix.columns(); ++i) {
+      for (int j = 0; j < matrix.columns(); ++j) {
         if (matrix.get(i, j) != matrix.get(j, i)) {
           throw new IllegalArgumentException("Matrix should be square");
         }
@@ -35,13 +35,13 @@ public class Assert {
   }
 
   public static void assertSquare(Matrix matrix) {
-    if (matrix.m() != matrix.n()) {
+    if (matrix.rows() != matrix.columns()) {
       throw new IllegalArgumentException("Matrix should be square");
     }
   }
 
   public static void assertSame(Matrix a, Matrix b) {
-    if (a.m() != b.m() || a.n() != b.n()) {
+    if (a.rows() != b.rows() || a.columns() != b.columns()) {
       throw new IllegalArgumentException("Matrices should have the same dimensions");
     }
   }

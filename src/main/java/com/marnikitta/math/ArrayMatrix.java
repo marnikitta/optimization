@@ -30,7 +30,7 @@ public class ArrayMatrix implements Matrix {
   public ArrayMatrix(double[][] data) {
     this.rows = new ArrayList<>(data.length);
     for (int i = 0; i < data.length; ++i) {
-      this.rows.set(i, new ArrayVector(data[i]));
+      this.rows.add(i, new ArrayVector(data[i]));
     }
     m = data.length;
     n = data[0].length;
@@ -60,12 +60,12 @@ public class ArrayMatrix implements Matrix {
   }
 
   @Override
-  public int m() {
+  public int rows() {
     return m;
   }
 
   @Override
-  public int n() {
+  public int columns() {
     return n;
   }
 

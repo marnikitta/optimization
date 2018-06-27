@@ -5,8 +5,6 @@ import com.marnikitta.math.Matrix;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.swing.text.MutableAttributeSet;
-
 public class FactorizationTest {
   @Test
   public void testCholesky() {
@@ -19,10 +17,10 @@ public class FactorizationTest {
     final Matrix result = a.copy();
     Assert.assertTrue(Factorization.cholesky(a, result));
 
-    final Matrix transposed = new ArrayMatrix(a.n());
+    final Matrix transposed = new ArrayMatrix(a.columns());
     Matrix.transpose(result, transposed);
 
-    final Matrix mult = new ArrayMatrix(a.n());
+    final Matrix mult = new ArrayMatrix(a.columns());
     Matrix.mult(result, transposed, mult);
 
     Assert.assertEquals(mult, a);
