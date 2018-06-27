@@ -1,48 +1,62 @@
 package com.marnikitta.math;
 
 import com.marnikitta.math.util.Assert;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public class ArrayMatrix implements Matrix {
-  private double[][] data;
+  private List<Vector> rows;
   private int m;
   private int n;
 
   public ArrayMatrix(int n) {
-    this.data = new double[n][n];
-    this.m = n;
-    this.n = n;
+    this(n, n);
   }
 
   public ArrayMatrix(int m, int n) {
-    this.data = new double[m][m];
+    this.rows = new ArrayList<>(m);
+    for (int i = 0; i < m; ++i) {
+      this.rows.add(i, new ArrayVector(n));
+    }
     this.m = m;
     this.n = n;
   }
 
   public ArrayMatrix(double[][] data) {
-    this.data = data;
+    this.rows = new ArrayList<>(data.length);
+    for (int i = 0; i < data.length; ++i) {
+      this.rows.set(i, new ArrayVector(data[i]));
+    }
     m = data.length;
     n = data[0].length;
   }
 
+  public ArrayMatrix(Collection<Vector> rows) {
+    this.rows = new ArrayList<>(rows);
+    this.m = this.rows.size();
+    this.n = this.rows.get(0).length();
+  }
+
   @Override
   public void clear() {
-    for (int i = 0; i < m; ++i) {
-      Arrays.fill(data[i], 0);
+    for (Vector row : rows) {
+      row.clear();
     }
   }
 
   @Override
   public double get(int i, int j) {
-    return data[i][j];
+    return rows.get(i).get(j);
   }
 
   @Override
   public void set(int i, int j, double value) {
-    data[i][j] = value;
+    rows.get(i).set(j, value);
   }
 
   @Override
@@ -56,53 +70,6 @@ public class ArrayMatrix implements Matrix {
   }
 
   @Override
-  public void mult(Vector vec, Vector dest) {
-    Assert.assertLength(vec, n);
-    Assert.assertLength(dest, m);
-
-    for (int i = 0; i < m; ++i) {
-      double tmp = 0;
-      for (int j = 0; j < n; ++j) {
-        tmp += data[i][j] * vec.get(j);
-      }
-      dest.set(i, tmp);
-    }
-  }
-
-  @Override
-  public void mult(Matrix that, Matrix dest) {
-    Assert.assertM(that, n);
-    Assert.assertM(dest, m);
-    Assert.assertN(dest, that.n());
-
-    for (int i = 0; i < m; ++i) {
-      final double t = get(i, 0);
-      for (int j = 0; j < that.n(); ++j) {
-        dest.set(i, j, t * that.get(0, j));
-      }
-
-      for (int k = 1; k < n; ++k) {
-        final double s = get(i, k);
-        for (int j = 0; j < that.n(); ++j) {
-          dest.set(i, j, dest.get(i, j) + s * that.get(k, j));
-        }
-      }
-    }
-  }
-
-  @Override
-  public void transpose(Matrix dest) {
-    Assert.assertM(dest, n);
-    Assert.assertN(dest, m);
-
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        dest.set(i, j, data[j][i]);
-      }
-    }
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -110,22 +77,20 @@ public class ArrayMatrix implements Matrix {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    final ArrayMatrix matrix = (ArrayMatrix) o;
-    return m == matrix.m() &&
-      n == matrix.n() &&
-      Arrays.deepEquals(data, matrix.data);
+    final ArrayMatrix vectors = (ArrayMatrix) o;
+    return m == vectors.m &&
+      n == vectors.n &&
+      Objects.equals(rows, vectors.rows);
   }
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(m, n);
-    result = 31 * result + Arrays.deepHashCode(data);
-    return result;
+    return Objects.hash(rows, m, n);
   }
 
   @Override
   public String toString() {
-    return Arrays.deepToString(data);
+    return rows.toString();
   }
 
   @Override
@@ -144,10 +109,16 @@ public class ArrayMatrix implements Matrix {
 
   @Override
   public ArrayMatrix copy() {
-    final double[][] copy = new double[m][n];
+    final List<Vector> copy = new ArrayList<>(m);
     for (int i = 0; i < m; ++i) {
-      System.arraycopy(data[i], 0, copy[i], 0, data[i].length);
+      copy.add(i, rows.get(i).copy());
     }
     return new ArrayMatrix(copy);
+  }
+
+  @NotNull
+  @Override
+  public Iterator<Vector> iterator() {
+    return rows.iterator();
   }
 }

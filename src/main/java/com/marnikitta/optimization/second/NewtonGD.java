@@ -72,7 +72,7 @@ public class NewtonGD implements SecondOrderMinimizer {
       }
 
       LinearSolve.rootsLower(cholesky, grad, tmpD);
-      cholesky.transpose(choleskyT);
+      Matrix.transpose(cholesky, choleskyT);
       LinearSolve.rootsUpper(choleskyT, tmpD, d);
 
       Vector.plus(start, -1, d, start);

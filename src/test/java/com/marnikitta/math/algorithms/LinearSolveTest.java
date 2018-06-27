@@ -24,7 +24,7 @@ public class LinearSolveTest {
     });
 
     final Vector b = new ArrayVector(3);
-    a.mult(expected, b);
+    Matrix.mult(a, expected, b);
 
     final Vector actual = new ArrayVector(3);
     LinearSolve.rootsLower(a, b, actual);
@@ -46,7 +46,8 @@ public class LinearSolveTest {
     });
 
     final Vector b = new ArrayVector(3);
-    a.mult(expected, b);
+
+    Matrix.mult(a, expected, b);
 
     final Vector actual = new ArrayVector(3);
     LinearSolve.rootsUpper(a, b, actual);

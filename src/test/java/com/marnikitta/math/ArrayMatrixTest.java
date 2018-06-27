@@ -24,7 +24,7 @@ public class ArrayMatrixTest {
     });
 
     final ArrayMatrix mult = new ArrayMatrix(2);
-    a.mult(b, mult);
+    Matrix.mult(a, b, mult);
 
     Assert.assertEquals(mult, expected);
   }
