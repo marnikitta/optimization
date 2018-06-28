@@ -21,8 +21,8 @@ public class LogitRegressionTest {
     rd.fill(X);
     rd.fill(y);
 
-    final LogitRegression.Loss loss = new LogitRegression.Loss(X, y, 4);
+    final LogitLoss logitLoss = new LogitLoss(X, y, 4);
 
-    GradUtils.checkGrad(loss, n, 100, 1);
+    GradUtils.checkGrad(logitLoss, n, 100, 1);
   }
 }

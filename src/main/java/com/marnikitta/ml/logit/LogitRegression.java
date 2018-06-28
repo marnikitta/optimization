@@ -3,63 +3,63 @@ package com.marnikitta.ml.logit;
 import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
-import com.marnikitta.math.VectorRowsMatrix;
-import com.marnikitta.optimization.second.SecondOrderOracle;
-import net.jcip.annotations.NotThreadSafe;
+import com.marnikitta.ml.Model;
+import com.marnikitta.optimization.first.ArmijoGD;
+
+import java.nio.ByteBuffer;
 
 public class LogitRegression {
+  private final ArmijoGD gr;
+  private final double lambda;
 
-  @NotThreadSafe
-  public static class Loss implements SecondOrderOracle {
-    private final Matrix Z;
-    private final Matrix ZT;
-    private final double lambda;
+  public LogitRegression(double lambda) {
+    this.gr = new ArmijoGD();
+    this.lambda = lambda;
+  }
 
-    private Vector tmpM;
-    private Vector tmpN;
+  public LogitModel fit(Matrix features, Vector target) {
+    final LogitLoss loss = new LogitLoss(features, target, lambda);
+    final Vector start = new ArrayVector(features.columns(), 10);
+    gr.minimize(loss, start);
+    return new LogitModel(start);
+  }
 
-    private Vector prevZw;
-    private Vector prevw;
+  public static class LogitModel implements Model {
+    private final Vector w;
 
-    public Loss(Matrix features, Vector target, double lambda) {
-      Z = features.copy();
-      this.lambda = lambda;
-      Z.negate();
-      Matrix.rowMult(Z, target, Z);
-
-      ZT = new VectorRowsMatrix(Z.columns(), Z.rows());
-      Matrix.transpose(Z, ZT);
-
-      tmpM = new ArrayVector(features.rows());
-      tmpN = new ArrayVector(features.columns());
-      prevZw = new ArrayVector(features.rows());
-      prevw = new ArrayVector(features.columns());
+    public LogitModel(Vector w) {
+      this.w = w;
     }
 
-    @Override
-    public double func(Vector w) {
-      if (!w.equals(prevw)) {
-        Matrix.mult(Z, w, prevZw);
-        w.copyTo(prevw);
+    public LogitModel(byte[] serialized) {
+      final ByteBuffer wrap = ByteBuffer.wrap(serialized);
+      final int len = wrap.limit() / Double.BYTES;
+      final double[] m = new double[len];
+      for (int i = 0; i < len; ++i) {
+        m[i] = wrap.getDouble();
       }
-      Vector.apply(prevZw, x -> Math.log(1 + Math.exp(x)), tmpM);
-      return tmpM.sum() + lambda / 2 * w.l2Norm2();
+      this.w = new ArrayVector(m);
     }
 
     @Override
-    public void grad(Vector w, Vector dest) {
-      if (!w.equals(prevw)) {
-        Matrix.mult(Z, w, prevZw);
-        w.copyTo(prevw);
+    public double predict(Vector x) {
+      return 1.0 / (1 + Math.exp(-Vector.dot(x, w)));
+    }
+
+    @Override
+    public void batchPredict(Matrix x, Vector dest) {
+      for (int i = 0; i < x.rows(); i++) {
+        dest.set(i, predict(x.get(i)));
       }
-      Vector.apply(prevZw, v -> 1.0 / (1 + Math.exp(-v)), tmpM);
-      Matrix.mult(ZT, tmpM, tmpN);
-      Vector.plus(tmpN, lambda, w, dest);
     }
 
     @Override
-    public void hessian(Vector x, Matrix dst) {
-      dst.clear();
+    public byte[] serialized() {
+      final ByteBuffer wrap = ByteBuffer.allocate(w.length() * Double.BYTES);
+      for (int i = 0; i < w.length(); ++i) {
+        wrap.putDouble(w.get(i));
+      }
+      return wrap.array();
     }
   }
 }
