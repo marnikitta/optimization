@@ -1,6 +1,6 @@
 package com.marnikitta.optimization.second;
 
-import com.marnikitta.math.ArrayMatrix;
+import com.marnikitta.math.VectorRowsMatrix;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
 import com.marnikitta.math.algorithms.Factorization;
@@ -34,9 +34,9 @@ public class NewtonGD implements SecondOrderMinimizer {
     Vector grad = start.copy();
     Vector tmpD = start.copy();
     Vector d = start.copy();
-    Matrix hessian = new ArrayMatrix(start.length());
-    Matrix cholesky = new ArrayMatrix(start.length());
-    Matrix choleskyT = new ArrayMatrix(start.length());
+    Matrix hessian = new VectorRowsMatrix(start.length());
+    Matrix cholesky = new VectorRowsMatrix(start.length());
+    Matrix choleskyT = new VectorRowsMatrix(start.length());
 
     final String header = String.format("%15s %15s %15s %15s\n", "iteration", "grad norm", "fxk", "oracleCalls");
     log.debug(header);

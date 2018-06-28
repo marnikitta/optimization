@@ -1,6 +1,6 @@
 package com.marnikitta.math.util;
 
-import com.marnikitta.math.ArrayMatrix;
+import com.marnikitta.math.VectorRowsMatrix;
 import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
@@ -53,8 +53,8 @@ public final class GradUtils {
   }
 
   public static void checkHessian(SecondOrderOracle oracle, int dim, int pointsCount, double eps) {
-    Matrix hessian = new ArrayMatrix(dim);
-    Matrix approxHessian = new ArrayMatrix(dim);
+    Matrix hessian = new VectorRowsMatrix(dim);
+    Matrix approxHessian = new VectorRowsMatrix(dim);
 
     Vector point = new ArrayVector(dim);
 

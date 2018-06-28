@@ -1,6 +1,6 @@
 package com.marnikitta.math.algorithms;
 
-import com.marnikitta.math.ArrayMatrix;
+import com.marnikitta.math.VectorRowsMatrix;
 import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
@@ -11,7 +11,7 @@ public class LinearSolveTest {
 
   @Test
   public void testRootsLower() {
-    final Matrix a = new ArrayMatrix(new double[][]{
+    final Matrix a = new VectorRowsMatrix(new double[][]{
       {1, 0, 0},
       {2, 3, 0},
       {4, 5, 6}
@@ -33,7 +33,7 @@ public class LinearSolveTest {
 
   @Test
   public void testRootsUpper() {
-    final Matrix a = new ArrayMatrix(new double[][]{
+    final Matrix a = new VectorRowsMatrix(new double[][]{
       {1, 2, 3},
       {0, 4, 5},
       {0, 0, 6}

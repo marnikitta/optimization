@@ -5,13 +5,13 @@ import com.marnikitta.math.util.Assert;
 public interface Matrix extends Iterable<Vector> {
   void clear();
 
-  double get(int i, int j);
-
-  void set(int i, int j, double value);
-
   int rows();
 
   int columns();
+
+  double get(int i, int j);
+
+  void set(int i, int j, double value);
 
   Matrix copy();
 

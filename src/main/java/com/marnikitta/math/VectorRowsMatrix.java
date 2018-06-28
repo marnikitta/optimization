@@ -1,7 +1,6 @@
 package com.marnikitta.math;
 
 import com.marnikitta.math.util.Assert;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,16 +8,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class ArrayMatrix implements Matrix {
+public class VectorRowsMatrix implements Matrix {
   private List<Vector> rows;
   private int m;
   private int n;
 
-  public ArrayMatrix(int n) {
+  public VectorRowsMatrix(int n) {
     this(n, n);
   }
 
-  public ArrayMatrix(int m, int n) {
+  public VectorRowsMatrix(int m, int n) {
     this.rows = new ArrayList<>(m);
     for (int i = 0; i < m; ++i) {
       this.rows.add(i, new ArrayVector(n));
@@ -27,7 +26,7 @@ public class ArrayMatrix implements Matrix {
     this.n = n;
   }
 
-  public ArrayMatrix(double[][] data) {
+  public VectorRowsMatrix(double[][] data) {
     this.rows = new ArrayList<>(data.length);
     for (int i = 0; i < data.length; ++i) {
       this.rows.add(i, new ArrayVector(data[i]));
@@ -36,7 +35,7 @@ public class ArrayMatrix implements Matrix {
     n = data[0].length;
   }
 
-  public ArrayMatrix(Collection<Vector> rows) {
+  public VectorRowsMatrix(Collection<Vector> rows) {
     this.rows = new ArrayList<>(rows);
     this.m = this.rows.size();
     this.n = this.rows.get(0).length();
@@ -77,7 +76,7 @@ public class ArrayMatrix implements Matrix {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    final ArrayMatrix vectors = (ArrayMatrix) o;
+    final VectorRowsMatrix vectors = (VectorRowsMatrix) o;
     return m == vectors.m &&
       n == vectors.n &&
       Objects.equals(rows, vectors.rows);
@@ -108,15 +107,14 @@ public class ArrayMatrix implements Matrix {
   }
 
   @Override
-  public ArrayMatrix copy() {
+  public VectorRowsMatrix copy() {
     final List<Vector> copy = new ArrayList<>(m);
     for (int i = 0; i < m; ++i) {
       copy.add(i, rows.get(i).copy());
     }
-    return new ArrayMatrix(copy);
+    return new VectorRowsMatrix(copy);
   }
 
-  @NotNull
   @Override
   public Iterator<Vector> iterator() {
     return rows.iterator();
