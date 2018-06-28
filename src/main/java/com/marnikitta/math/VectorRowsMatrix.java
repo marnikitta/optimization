@@ -54,6 +54,11 @@ public class VectorRowsMatrix implements Matrix {
   }
 
   @Override
+  public Vector get(int i) {
+    return rows.get(i);
+  }
+
+  @Override
   public void set(int i, int j, double value) {
     rows.get(i).set(j, value);
   }

@@ -2,6 +2,8 @@ package com.marnikitta.math;
 
 import com.marnikitta.math.util.Assert;
 
+import java.util.function.DoubleUnaryOperator;
+
 public interface Vector {
   int length();
 
@@ -15,16 +17,17 @@ public interface Vector {
 
   void copyTo(Vector dest);
 
-  static void plus(Vector a, Vector b, Vector dest) {
-    plus(a, 1, b, dest);
+  default double sum() {
+    double result = 0;
+    for (int i = 0; i < length(); ++i) {
+      result += get(i);
+    }
+    return result;
   }
 
-  static void plus(Vector a, double alpha, Vector b, Vector dest) {
-    Assert.assertSameLength(a, b);
-    Assert.assertSameLength(a, dest);
-
-    for (int i = 0; i < a.length(); ++i) {
-      dest.set(i, a.get(i) + alpha * b.get(i));
+  default void negate() {
+    for (int i = 0; i < length(); ++i) {
+      set(i, -get(i));
     }
   }
 
@@ -78,6 +81,33 @@ public interface Vector {
     }
 
     return result;
+  }
+
+  static void apply(Vector a, DoubleUnaryOperator f, Vector dest) {
+    for (int i = 0; i < a.length(); i++) {
+      dest.set(i, f.applyAsDouble(a.get(i)));
+    }
+  }
+
+  static void mult(Vector a, double alpha, Vector dest) {
+    Assert.assertSameLength(a, dest);
+
+    for (int i = 0; i < a.length(); ++i) {
+      dest.set(i, a.get(i) * alpha);
+    }
+  }
+
+  static void plus(Vector a, Vector b, Vector dest) {
+    plus(a, 1, b, dest);
+  }
+
+  static void plus(Vector a, double alpha, Vector b, Vector dest) {
+    Assert.assertSameLength(a, b);
+    Assert.assertSameLength(a, dest);
+
+    for (int i = 0; i < a.length(); ++i) {
+      dest.set(i, a.get(i) + alpha * b.get(i));
+    }
   }
 
   static double l2Distance(Vector a, Vector b) {

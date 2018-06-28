@@ -11,11 +11,17 @@ public interface Matrix extends Iterable<Vector> {
 
   double get(int i, int j);
 
+  Vector get(int i);
+
   void set(int i, int j, double value);
 
   Matrix copy();
 
   double maxAbsDiff(Matrix that);
+
+  default void negate() {
+    forEach(Vector::negate);
+  }
 
   static void transpose(Matrix a, Matrix dest) {
     Assert.assertM(dest, a.columns());
@@ -23,7 +29,7 @@ public interface Matrix extends Iterable<Vector> {
 
     for (int i = 0; i < a.rows(); i++) {
       for (int j = 0; j < a.columns(); j++) {
-        dest.set(i, j, a.get(j, i));
+        dest.set(j, i, a.get(i, j));
       }
     }
   }
@@ -36,6 +42,14 @@ public interface Matrix extends Iterable<Vector> {
     for (Vector row : a) {
       dest.set(i, Vector.dot(row, b));
       i++;
+    }
+  }
+
+  static void rowMult(Matrix a, Vector y, Matrix dest) {
+    Assert.assertLength(y, a.rows());
+
+    for (int i = 0; i < a.rows(); ++i) {
+      Vector.mult(a.get(i), y.get(i), dest.get(i));
     }
   }
 

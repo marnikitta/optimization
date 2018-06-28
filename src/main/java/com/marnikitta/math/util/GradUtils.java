@@ -1,9 +1,9 @@
 package com.marnikitta.math.util;
 
-import com.marnikitta.math.VectorRowsMatrix;
 import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
+import com.marnikitta.math.VectorRowsMatrix;
 import com.marnikitta.optimization.first.FirstOrderOracle;
 import com.marnikitta.optimization.second.SecondOrderOracle;
 
@@ -46,7 +46,7 @@ public final class GradUtils {
 
       final double abs = Vector.l1Distance(grad, approxGrad);
 
-      if (abs > eps) {
+      if (abs > eps || Double.isNaN(abs)) {
         throw new IllegalArgumentException("Grad is broken: difference is " + abs);
       }
     }
