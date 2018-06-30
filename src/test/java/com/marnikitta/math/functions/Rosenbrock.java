@@ -2,7 +2,7 @@ package com.marnikitta.math.functions;
 
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
-import com.marnikitta.optimization.second.SecondOrderOracle;
+import com.marnikitta.optimization.SecondOrderOracle;
 
 import static java.lang.Math.pow;
 

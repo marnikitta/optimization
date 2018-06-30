@@ -4,15 +4,12 @@ import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
 import com.marnikitta.ml.Model;
-import com.marnikitta.optimization.first.ArmijoGD;
-import com.marnikitta.optimization.first.FirstOrderMinimizer;
-import com.marnikitta.optimization.second.NewtonGD;
-import com.marnikitta.optimization.second.SecondOrderMinimizer;
+import com.marnikitta.optimization.NewtonGD;
 
 import java.nio.ByteBuffer;
 
 public class LogitRegression {
-  private final SecondOrderMinimizer gr;
+  private final NewtonGD gr;
   private final double lambda;
 
   public LogitRegression(double lambda) {

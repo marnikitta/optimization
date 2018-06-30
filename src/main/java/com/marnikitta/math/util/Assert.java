@@ -22,18 +22,6 @@ public class Assert {
     }
   }
 
-  public static void assertSymmetric(Matrix matrix) {
-    assertSquare(matrix);
-
-    for (int i = 0; i < matrix.columns(); ++i) {
-      for (int j = 0; j < matrix.columns(); ++j) {
-        if (matrix.get(i, j) != matrix.get(j, i)) {
-          throw new IllegalArgumentException("Matrix should be square");
-        }
-      }
-    }
-  }
-
   public static void assertSquare(Matrix matrix) {
     if (matrix.rows() != matrix.columns()) {
       throw new IllegalArgumentException("Matrix should be square");

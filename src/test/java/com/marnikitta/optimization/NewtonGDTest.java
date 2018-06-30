@@ -4,8 +4,6 @@ import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Vector;
 import com.marnikitta.math.functions.Parabolic;
 import com.marnikitta.math.functions.Rosenbrock;
-import com.marnikitta.optimization.second.NewtonGD;
-import com.marnikitta.optimization.second.SecondOrderOracle;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

@@ -4,8 +4,8 @@ import com.marnikitta.math.ArrayVector;
 import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
 import com.marnikitta.math.VectorRowsMatrix;
-import com.marnikitta.optimization.first.FirstOrderOracle;
-import com.marnikitta.optimization.second.SecondOrderOracle;
+import com.marnikitta.optimization.FirstOrderOracle;
+import com.marnikitta.optimization.SecondOrderOracle;
 
 import java.util.Random;
 

@@ -1,8 +1,8 @@
 package com.marnikitta.math.util;
 
 import com.marnikitta.math.functions.Rosenbrock;
-import com.marnikitta.optimization.first.FirstOrderOracle;
-import com.marnikitta.optimization.second.SecondOrderOracle;
+import com.marnikitta.optimization.FirstOrderOracle;
+import com.marnikitta.optimization.SecondOrderOracle;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -18,7 +18,7 @@ public class GradUtilsTest {
 
   @Test(dataProvider = "secondOrderOracles")
   public void testGrad(FirstOrderOracle oracle, int dim) {
-    GradUtils.checkGrad(oracle, dim, 100, 1);
+    GradUtils.checkGrad(oracle, dim, 100, 1e-1);
   }
 
   @Test(dataProvider = "secondOrderOracles")
