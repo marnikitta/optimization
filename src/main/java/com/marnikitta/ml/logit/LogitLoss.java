@@ -28,8 +28,8 @@ public class LogitLoss implements SecondOrderOracle {
 
     Z = features.copy();
     this.lambda = lambda;
+    Matrix.rowMult(features, target, Z);
     Z.negate();
-    Matrix.rowMult(Z, target, Z);
 
     norm = 1.0 / Z.rows();
 
@@ -71,6 +71,7 @@ public class LogitLoss implements SecondOrderOracle {
 
   @Override
   public void grad(Vector w, Vector dest) {
+    dest.clear();
     if (!w.equals(prevw)) {
       Matrix.mult(Z, w, prevZw);
       w.copyTo(prevw);
@@ -88,7 +89,7 @@ public class LogitLoss implements SecondOrderOracle {
       w.copyTo(prevw);
     }
     Vector.apply(prevZw, v -> norm * stableSigma(v) * (1 - stableSigma(v)), tmpM);
-    Matrix.multWithDiag(ZT, tmpM, Z, dest);
+    Matrix.zTDiagZ(ZT, tmpM, dest);
     Matrix.adjustDiag(dest, lambda, dest);
   }
 }

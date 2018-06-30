@@ -52,7 +52,7 @@ public class NewtonGD implements SecondOrderMinimizer {
 
       final double gradNorm = grad.l2Norm();
 
-      if (iteration % 1001 == 0 && log.isDebugEnabled()) {
+      if (iteration % 2 == 0 && log.isDebugEnabled()) {
         log.debug(String.format("%15d %15e %15e% 15d\n", iteration, gradNorm, f, oracleCalls));
       }
 

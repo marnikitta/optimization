@@ -17,13 +17,21 @@ public class VectorRowsMatrix implements Matrix {
     this(n, n);
   }
 
-  public VectorRowsMatrix(int m, int n) {
+  public VectorRowsMatrix(int m, int n, boolean sparse) {
     this.rows = new ArrayList<>(m);
     for (int i = 0; i < m; ++i) {
-      this.rows.add(i, new ArrayVector(n));
+      if (sparse) {
+        this.rows.add(i, new SparseVector(n));
+      } else {
+        this.rows.add(i, new ArrayVector(n));
+      }
     }
     this.m = m;
     this.n = n;
+  }
+
+  public VectorRowsMatrix(int m, int n) {
+    this(m, n, false);
   }
 
   public VectorRowsMatrix(double[][] data) {

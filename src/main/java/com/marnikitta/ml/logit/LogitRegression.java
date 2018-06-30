@@ -12,11 +12,11 @@ import com.marnikitta.optimization.second.SecondOrderMinimizer;
 import java.nio.ByteBuffer;
 
 public class LogitRegression {
-  private final FirstOrderMinimizer gr;
+  private final SecondOrderMinimizer gr;
   private final double lambda;
 
   public LogitRegression(double lambda) {
-    this.gr = new ArmijoGD();
+    this.gr = new NewtonGD();
     this.lambda = lambda;
   }
 

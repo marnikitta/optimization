@@ -8,6 +8,11 @@ public class SparseVector implements Vector {
   private final TIntDoubleMap data;
   private final int length;
 
+  public SparseVector(int length) {
+    this.data = new TIntDoubleHashMap();
+    this.length = length;
+  }
+
   public SparseVector(double[] data) {
     this.data = new TIntDoubleHashMap();
     for (int i = 0; i < data.length; ++i) {

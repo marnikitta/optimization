@@ -85,21 +85,14 @@ public interface Matrix extends Iterable<Vector> {
     }
   }
 
-  static void multWithDiag(Matrix a, Vector diag, Matrix b, Matrix dest) {
+  static void zTDiagZ(Matrix zT, Vector diag, Matrix dest) {
     dest.clear();
-    Assert.assertN(a, diag.length());
+    Assert.assertM(dest, zT.rows());
+    Assert.assertN(dest, zT.rows());
 
-    for (int i = 0; i < a.rows(); ++i) {
-      for (VectorIterator aIt = a.get(i).nonZeroIterator(); aIt.hasNext(); ) {
-        aIt.advance();
-        final int k = aIt.position();
-        final double s = aIt.value() * diag.get(k);
-
-        for (VectorIterator bIt = b.get(k).nonZeroIterator(); bIt.hasNext(); ) {
-          bIt.advance();
-          final int j = bIt.position();
-          dest.set(i, j, dest.get(i, j) + s * bIt.value());
-        }
+    for (int j = 0; j < zT.rows(); ++j) {
+      for (int i = 0; i < zT.rows(); ++i) {
+        dest.set(i, j, Vector.weightedDot(zT.get(i), zT.get(j), diag));
       }
     }
   }

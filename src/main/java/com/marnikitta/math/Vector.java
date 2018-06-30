@@ -77,6 +77,18 @@ public interface Vector {
     return result;
   }
 
+  static double weightedDot(Vector a, Vector b, Vector w) {
+    Assert.assertSameLength(a, b);
+    double result = 0;
+
+    for (VectorIterator aIt = a.nonZeroIterator(); aIt.hasNext(); ) {
+      aIt.advance();
+      result += aIt.value() * b.get(aIt.position()) * w.get(aIt.position());
+    }
+
+    return result;
+  }
+
   static double dot(Vector a, Vector b) {
     Assert.assertSameLength(a, b);
     double result = 0;
