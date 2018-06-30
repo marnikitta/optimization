@@ -1,9 +1,10 @@
 package com.marnikitta.math;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class ArrayVector implements Vector {
-  private double[] data;
+  private final double[] data;
 
   public ArrayVector(double[] value) {
     this.data = value;
@@ -55,6 +56,11 @@ public class ArrayVector implements Vector {
   }
 
   @Override
+  public VectorIterator nonZeroIterator() {
+    return new ArrayNonZeroIterator();
+  }
+
+  @Override
   public String toString() {
     return Arrays.toString(data);
   }
@@ -74,5 +80,50 @@ public class ArrayVector implements Vector {
   @Override
   public int hashCode() {
     return Arrays.hashCode(data);
+  }
+
+  private class ArrayNonZeroIterator implements VectorIterator {
+    private int currentIndex = -1;
+    private int nextNotZeroIndex = -1;
+
+    @Override
+    public int position() {
+      return currentIndex;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return findNextNonZero();
+    }
+
+    @Override
+    public void advance() {
+      if (findNextNonZero()) {
+        currentIndex = nextNotZeroIndex;
+        nextNotZeroIndex = -1;
+      } else {
+        throw new NoSuchElementException();
+      }
+    }
+
+    @Override
+    public double value() {
+      return data[currentIndex];
+    }
+
+    private boolean findNextNonZero() {
+      if (nextNotZeroIndex > currentIndex) {
+        return true;
+      }
+
+      for (int i = currentIndex + 1; i < data.length; ++i) {
+        if (data[i] != 0) {
+          nextNotZeroIndex = i;
+          return true;
+        }
+      }
+
+      return false;
+    }
   }
 }

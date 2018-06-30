@@ -5,11 +5,14 @@ import com.marnikitta.math.Matrix;
 import com.marnikitta.math.Vector;
 import com.marnikitta.ml.Model;
 import com.marnikitta.optimization.first.ArmijoGD;
+import com.marnikitta.optimization.first.FirstOrderMinimizer;
+import com.marnikitta.optimization.second.NewtonGD;
+import com.marnikitta.optimization.second.SecondOrderMinimizer;
 
 import java.nio.ByteBuffer;
 
 public class LogitRegression {
-  private final ArmijoGD gr;
+  private final FirstOrderMinimizer gr;
   private final double lambda;
 
   public LogitRegression(double lambda) {
@@ -19,7 +22,7 @@ public class LogitRegression {
 
   public LogitModel fit(Matrix features, Vector target) {
     final LogitLoss loss = new LogitLoss(features, target, lambda);
-    final Vector start = new ArrayVector(features.columns(), 10);
+    final Vector start = new ArrayVector(features.columns(), 0);
     gr.minimize(loss, start);
     return new LogitModel(start);
   }

@@ -37,7 +37,7 @@ public class LogitCLI {
       final Matrix feature = new VectorRowsMatrix(features);
       final Vector target = new ArrayVector(tArr);
 
-      final LogitRegression logit = new LogitRegression(2);
+      final LogitRegression logit = new LogitRegression(1.0 / feature.rows());
       final LogitRegression.LogitModel fit = logit.fit(feature, target);
 
       Files.write(Paths.get(modelPath), fit.serialized());

@@ -28,8 +28,9 @@ public interface Matrix extends Iterable<Vector> {
     Assert.assertN(dest, a.rows());
 
     for (int i = 0; i < a.rows(); i++) {
-      for (int j = 0; j < a.columns(); j++) {
-        dest.set(j, i, a.get(i, j));
+      for (VectorIterator it = a.get(i).nonZeroIterator(); it.hasNext(); ) {
+        it.advance();
+        dest.set(it.position(), i, it.value());
       }
     }
   }
@@ -58,16 +59,46 @@ public interface Matrix extends Iterable<Vector> {
     Assert.assertM(dest, a.rows());
     Assert.assertN(dest, b.columns());
 
-    for (int i = 0; i < a.rows(); ++i) {
-      final double t = a.get(i, 0);
-      for (int j = 0; j < b.columns(); ++j) {
-        dest.set(i, j, t * b.get(0, j));
-      }
+    dest.clear();
 
-      for (int k = 1; k < a.columns(); ++k) {
-        final double s = a.get(i, k);
-        for (int j = 0; j < b.columns(); ++j) {
-          dest.set(i, j, dest.get(i, j) + s * b.get(k, j));
+    for (int i = 0; i < a.rows(); ++i) {
+      for (VectorIterator aIt = a.get(i).nonZeroIterator(); aIt.hasNext(); ) {
+        aIt.advance();
+        final int k = aIt.position();
+        final double s = aIt.value();
+
+        for (VectorIterator bIt = b.get(k).nonZeroIterator(); bIt.hasNext(); ) {
+          bIt.advance();
+          final int j = bIt.position();
+          dest.set(i, j, dest.get(i, j) + s * bIt.value());
+        }
+      }
+    }
+  }
+
+  static void adjustDiag(Matrix a, double add, Matrix dest) {
+    Assert.assertSame(a, dest);
+
+    final int diagLength = Math.min(a.rows(), a.columns());
+    for (int i = 0; i < diagLength; i++) {
+      a.set(i, i, a.get(i, i) + add);
+    }
+  }
+
+  static void multWithDiag(Matrix a, Vector diag, Matrix b, Matrix dest) {
+    dest.clear();
+    Assert.assertN(a, diag.length());
+
+    for (int i = 0; i < a.rows(); ++i) {
+      for (VectorIterator aIt = a.get(i).nonZeroIterator(); aIt.hasNext(); ) {
+        aIt.advance();
+        final int k = aIt.position();
+        final double s = aIt.value() * diag.get(k);
+
+        for (VectorIterator bIt = b.get(k).nonZeroIterator(); bIt.hasNext(); ) {
+          bIt.advance();
+          final int j = bIt.position();
+          dest.set(i, j, dest.get(i, j) + s * bIt.value());
         }
       }
     }

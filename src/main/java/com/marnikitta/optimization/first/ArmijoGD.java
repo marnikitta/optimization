@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class ArmijoGD implements FirstOrderMinimizer {
   private static final int DEFAULT_MAX_ITER = (int) 1.0e6;
   private static final int DEFAULT_MAX_ORACLE_CALLS = (int) 1.0e8;
-  private static final double DEFAULT_TOLERANCE = 1.0e-5;
+  private static final double DEFAULT_TOLERANCE = 1.0e-7;
   private static final double DEFAULT_C1 = 1.0e-6;
 
   private final Logger log = LoggerFactory.getLogger(ArmijoGD.class);

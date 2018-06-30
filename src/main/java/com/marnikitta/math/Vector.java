@@ -17,25 +17,30 @@ public interface Vector {
 
   void copyTo(Vector dest);
 
+  VectorIterator nonZeroIterator();
+
   default double sum() {
     double result = 0;
-    for (int i = 0; i < length(); ++i) {
-      result += get(i);
+    for (VectorIterator it = nonZeroIterator(); it.hasNext(); ) {
+      it.advance();
+      result += it.value();
     }
     return result;
   }
 
   default void negate() {
-    for (int i = 0; i < length(); ++i) {
-      set(i, -get(i));
+    for (VectorIterator it = nonZeroIterator(); it.hasNext(); ) {
+      it.advance();
+      set(it.position(), -it.value());
     }
   }
 
   default double lpNormP(int p) {
     double result = 0;
 
-    for (int i = 0; i < length(); ++i) {
-      result += Math.pow(Math.abs(get(i)), p);
+    for (VectorIterator it = nonZeroIterator(); it.hasNext(); ) {
+      it.advance();
+      result += Math.pow(Math.abs(it.value()), p);
     }
 
     return result;
@@ -76,8 +81,9 @@ public interface Vector {
     Assert.assertSameLength(a, b);
     double result = 0;
 
-    for (int i = 0; i < a.length(); ++i) {
-      result += a.get(i) * b.get(i);
+    for (VectorIterator aIt = a.nonZeroIterator(); aIt.hasNext(); ) {
+      aIt.advance();
+      result += aIt.value() * b.get(aIt.position());
     }
 
     return result;
@@ -91,9 +97,11 @@ public interface Vector {
 
   static void mult(Vector a, double alpha, Vector dest) {
     Assert.assertSameLength(a, dest);
+    dest.clear();
 
-    for (int i = 0; i < a.length(); ++i) {
-      dest.set(i, a.get(i) * alpha);
+    for (VectorIterator it = a.nonZeroIterator(); it.hasNext(); ) {
+      it.advance();
+      dest.set(it.position(), it.value() * alpha);
     }
   }
 

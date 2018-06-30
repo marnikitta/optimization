@@ -12,6 +12,7 @@ import net.jcip.annotations.NotThreadSafe;
 public class LogitLoss implements SecondOrderOracle {
   private final Matrix Z;
   private final Matrix ZT;
+
   private final double lambda;
   private final double norm;
 
@@ -20,6 +21,7 @@ public class LogitLoss implements SecondOrderOracle {
 
   private Vector prevZw;
   private Vector prevw;
+
 
   public LogitLoss(Matrix features, Vector target, double lambda) {
     Assert.assertM(features, target.length());
@@ -46,15 +48,24 @@ public class LogitLoss implements SecondOrderOracle {
       Matrix.mult(Z, w, prevZw);
       w.copyTo(prevw);
     }
-    Vector.apply(prevZw, this::stablelogexp, tmpM);
+    Vector.apply(prevZw, this::stableLogExp, tmpM);
     return norm * tmpM.sum() + lambda / 2 * w.l2Norm2();
   }
 
-  private double stablelogexp(double x) {
+  private double stableLogExp(double x) {
     if (x < 0) {
       return Math.log(1 + Math.exp(x));
     } else {
       return x + Math.log(1 + Math.exp(-x));
+    }
+  }
+
+  private double stableSigma(double x) {
+    if (x < 0) {
+      final double a = Math.exp(x);
+      return a / (1 + a);
+    } else {
+      return 1.0 / (1 + Math.exp(-x));
     }
   }
 
@@ -64,13 +75,20 @@ public class LogitLoss implements SecondOrderOracle {
       Matrix.mult(Z, w, prevZw);
       w.copyTo(prevw);
     }
-    Vector.apply(prevZw, v -> norm / (1 + Math.exp(-v)), tmpM);
+    Vector.apply(prevZw, v -> norm * stableSigma(v), tmpM);
     Matrix.mult(ZT, tmpM, tmpN);
     Vector.plus(tmpN, lambda, w, dest);
   }
 
   @Override
-  public void hessian(Vector x, Matrix dst) {
-    dst.clear();
+  public void hessian(Vector w, Matrix dest) {
+    dest.clear();
+    if (!w.equals(prevw)) {
+      Matrix.mult(Z, w, prevZw);
+      w.copyTo(prevw);
+    }
+    Vector.apply(prevZw, v -> norm * stableSigma(v) * (1 - stableSigma(v)), tmpM);
+    Matrix.multWithDiag(ZT, tmpM, Z, dest);
+    Matrix.adjustDiag(dest, lambda, dest);
   }
 }
