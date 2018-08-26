@@ -1,5 +1,7 @@
 package com.marnikitta.math;
 
+import com.marnikitta.math.util.Assert;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -47,11 +49,14 @@ public class ArrayVector implements Vector {
 
   @Override
   public void copyTo(Vector dest) {
+    Assert.assertSameLength(this, dest);
     if (dest instanceof ArrayVector) {
       final ArrayVector arrayDst = ((ArrayVector) dest);
       System.arraycopy(data, 0, arrayDst.data, 0, data.length);
     } else {
-      throw new UnsupportedOperationException();
+      for (int i = 0; i < data.length; i++) {
+        dest.set(i, data[i]);
+      }
     }
   }
 

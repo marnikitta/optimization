@@ -58,7 +58,7 @@ public final class GradUtils {
 
     Vector point = new ArrayVector(dim);
 
-    final Random rd = new Random();
+    final Random rd = new Random(4);
 
     for (int n = 0; n < pointsCount; ++n) {
       for (int j = 0; j < dim; ++j) {
